@@ -1,10 +1,15 @@
 package com.devandroid.bakingapp.Model;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class Ingredient {
 
-    private double mQuantity;
-    private String mMeasure;
-    private String mDescription;
+    double mQuantity;
+    String mMeasure;
+    String mDescription;
+
+    public Ingredient() {}
 
     public Ingredient(double quantity, String measure, String description) {
 
@@ -12,5 +17,9 @@ public class Ingredient {
         mMeasure = measure;
         mDescription = description;
     }
+
+    public double getmQuantity() { return mQuantity; }
+    public String getmMeasure() { return mMeasure; }
+    public String getmDescription() { return mDescription; }
 
 }

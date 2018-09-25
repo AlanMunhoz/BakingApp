@@ -1,12 +1,17 @@
 package com.devandroid.bakingapp.Model;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class Step {
 
-    private int mId;
-    private String mShortDescription;
-    private String mDescription;
-    private String mVideoUrl;
-    private String mThumbnailUrl;
+    int mId;
+    String mShortDescription;
+    String mDescription;
+    String mVideoUrl;
+    String mThumbnailUrl;
+
+    public Step() {}
 
     public Step(int id, String shortDescription, String description, String videoUrl, String thumbnailUrl) {
 
@@ -16,5 +21,8 @@ public class Step {
         mVideoUrl = videoUrl;
         mThumbnailUrl = thumbnailUrl;
     }
+
+    public int getmId() { return mId; }
+    public String getmShortDescription() { return mShortDescription; }
 
 }
