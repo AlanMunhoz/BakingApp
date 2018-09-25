@@ -3,17 +3,23 @@ package com.devandroid.bakingapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.devandroid.bakingapp.Model.Recipe;
 
 import org.parceler.Parcels;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Optional;
 
 public class RecipeActivity extends AppCompatActivity implements RecipeFragment.OnFragmentInteractionListener {
 
@@ -24,6 +30,10 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
     Recipe mRecipe;
     int mStep;
+    boolean bLargeScreen;
+
+    @BindView(R.id.fl_fragment_list_steps) FrameLayout mFlListSteps;
+    @BindView(R.id.fl_step_fragment) @Nullable FrameLayout mFlSteps;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -40,6 +50,14 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        ButterKnife.bind(this);
+
+        if(mFlSteps != null) {
+            bLargeScreen = true;
+        } else {
+            bLargeScreen = false;
+        }
 
         /**
          * Gets the object passed by intent
@@ -66,13 +84,18 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
         mStep = position;
 
-        Context context = RecipeActivity.this;
-        Class stepActivity = StepActivity.class;
-        Intent intent = new Intent(context, stepActivity);
+        if(!bLargeScreen) {
+            Context context = RecipeActivity.this;
+            Class stepActivity = StepActivity.class;
+            Intent intent = new Intent(context, stepActivity);
 
-        intent.putExtra(BUNDLE_DETAILS_EXTRA, Parcels.wrap(mRecipe));
-        intent.putExtra(BUNDLE_STEP_EXTRA, position);
-        startActivityForResult(intent, 1);
+            intent.putExtra(BUNDLE_DETAILS_EXTRA, Parcels.wrap(mRecipe));
+            intent.putExtra(BUNDLE_STEP_EXTRA, position);
+            startActivityForResult(intent, 1);
+        } else {
+
+            createUpdateFragment(false);
+        }
     }
 
     @Override
@@ -101,11 +124,30 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             fragmentManager.beginTransaction()
                     .add(R.id.fl_fragment_list_steps, recipeFragment)
                     .commit();
-        } else {
-            Log.d(LOG_TAG, "Atualizando fragments");
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fl_fragment_list_steps, recipeFragment)
-                    .commit();
+        }
+
+        if(bLargeScreen) {
+
+            StepFragment stepFragment = new StepFragment();
+
+            bundle = new Bundle();
+            bundle.putParcelable(BUNDLE_FRAGMENT_EXTRA, Parcels.wrap(mRecipe));
+            bundle.putInt(BUNDLE_STEP_EXTRA, mStep);
+            stepFragment.setArguments(bundle);
+
+            fragmentManager = getSupportFragmentManager();
+
+            if (bCreate) {
+                Log.d(LOG_TAG, "Criando fragments");
+                fragmentManager.beginTransaction()
+                        .add(R.id.fl_step_fragment, stepFragment)
+                        .commit();
+            } else {
+                Log.d(LOG_TAG, "Atualizando fragments");
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fl_step_fragment, stepFragment)
+                        .commit();
+            }
         }
     }
 }
