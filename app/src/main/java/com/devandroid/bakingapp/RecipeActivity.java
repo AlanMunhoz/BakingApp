@@ -28,9 +28,9 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     public static final String BUNDLE_STEP_EXTRA = "fragment_step_extra";
     public static final String BUNDLE_EXTRA_RESULT = "extra_result";
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
-    Recipe mRecipe;
-    int mStep;
-    boolean bLargeScreen;
+    private Recipe mRecipe;
+    private int mStep;
+    private boolean bLargeScreen;
 
     @BindView(R.id.fl_fragment_list_steps) FrameLayout mFlListSteps;
     @BindView(R.id.fl_step_fragment) @Nullable FrameLayout mFlSteps;

@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
         ButterKnife.bind(this);
 
         try {
-            lstRecipe = JSON.ParseRecipe(JSON.JSON_STRING);
+            lstRecipe = JSON.ParseRecipe(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
