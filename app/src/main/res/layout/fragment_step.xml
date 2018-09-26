@@ -5,18 +5,18 @@
     android:layout_height="match_parent">
 
 
-        <FrameLayout
-            android:id="@+id/fl_video_container"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/ep_player_view"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        </FrameLayout>
+    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 
     <TextView
         android:id="@+id/tv_step"
@@ -29,7 +29,7 @@
         android:text="@string/hello_blank_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fl_video_container" />
+        app:layout_constraintTop_toBottomOf="@+id/ep_player_view" />
 
 
     </android.support.constraint.ConstraintLayout>

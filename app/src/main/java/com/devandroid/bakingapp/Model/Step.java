@@ -24,5 +24,6 @@ public class Step {
 
     public int getmId() { return mId; }
     public String getmShortDescription() { return mShortDescription; }
+    public String getmVideoUrl() { return mVideoUrl; }
 
 }

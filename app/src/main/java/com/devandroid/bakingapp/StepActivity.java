@@ -3,9 +3,11 @@ package com.devandroid.bakingapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -27,6 +29,16 @@ public class StepActivity extends AppCompatActivity {
     @BindView(R.id.btnBack) Button mBtnBack;
     @BindView(R.id.btnForward) Button mBtnForward;
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +46,18 @@ public class StepActivity extends AppCompatActivity {
         setContentView(R.layout.activity_step);
 
         ButterKnife.bind(this);
+
+        /**
+         * Gets the object passed by intent
+         */
+        mRecipe = Parcels.unwrap(getIntent().getParcelableExtra(RecipeActivity.BUNDLE_DETAILS_EXTRA));
+        mStep = getIntent().getIntExtra(RecipeActivity.BUNDLE_STEP_EXTRA, 0);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(mRecipe.getName());
+        }
 
         mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,12 +79,6 @@ public class StepActivity extends AppCompatActivity {
                 }
             }
         });
-
-        /**
-         * Gets the object passed by intent
-         */
-        mRecipe = Parcels.unwrap(getIntent().getParcelableExtra(RecipeActivity.BUNDLE_DETAILS_EXTRA));
-        mStep = getIntent().getIntExtra(RecipeActivity.BUNDLE_STEP_EXTRA, 0);
 
         /**
          * Create new fragment only if there aren't any already created
