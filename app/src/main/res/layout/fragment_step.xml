@@ -1,35 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/ep_player_view"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_step"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/ep_player_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+        </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+
+        <ImageView
+            android:id="@+id/iv_none_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/none_video" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_step"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
-        android:text="@string/hello_blank_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ep_player_view" />
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
 
-    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>

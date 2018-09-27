@@ -1,13 +1,13 @@
 package com.devandroid.bakingapp;
 
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.devandroid.bakingapp.Model.Recipe;
@@ -33,13 +33,16 @@ import butterknife.ButterKnife;
 public class StepFragment extends Fragment {
 
     private static final String LOG_TAG = StepFragment.class.getSimpleName();
+    public static final String BUNDLE_LAST_TIME_VIDEO_EXTRA = "last_time_video";
 
     @BindView(R.id.tv_step) TextView mTvStep;
     @BindView(R.id.ep_player_view) SimpleExoPlayerView mPlayerView;
+    @BindView(R.id.iv_none_video) ImageView mNoneVideo;
 
     private SimpleExoPlayer mExoPlayer;
     private Recipe mRecipe;
     private int mStep;
+    private long mLastTimeVideo;
 
     public StepFragment() { }
 
@@ -55,20 +58,35 @@ public class StepFragment extends Fragment {
             mStep = getArguments().getInt(StepActivity.BUNDLE_STEP_EXTRA);
         }
 
+        if(savedInstanceState!=null) {
+            mLastTimeVideo = savedInstanceState.getLong(BUNDLE_LAST_TIME_VIDEO_EXTRA, 0);
+        }
+
+
         String strStep;
         Step step = mRecipe.getLstSteps().get(mStep);
         strStep = Integer.toString(step.getmId()) + ". " + step.getmShortDescription();
         mTvStep.setText(strStep);
 
         // Initialize the player.
-        Log.d(LOG_TAG, "Url video: " + step.getmVideoUrl());
         if(step.getmVideoUrl().isEmpty()) {
-            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.none_video));
+            mNoneVideo.setVisibility(View.VISIBLE);
+            mPlayerView.setVisibility(View.GONE);
         } else {
+            mNoneVideo.setVisibility(View.GONE);
+            mPlayerView.setVisibility(View.VISIBLE);
             initializePlayer(Uri.parse(step.getmVideoUrl()));
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        mLastTimeVideo = mExoPlayer.getCurrentPosition();
+        outState.putLong(BUNDLE_LAST_TIME_VIDEO_EXTRA, mLastTimeVideo);
     }
 
     @Override
@@ -92,6 +110,7 @@ public class StepFragment extends Fragment {
                     new DefaultExtractorsFactory(),
                     null,
                     null);
+            mExoPlayer.seekTo(mLastTimeVideo);
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
         }
