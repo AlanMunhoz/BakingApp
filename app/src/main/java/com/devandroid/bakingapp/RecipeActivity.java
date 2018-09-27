@@ -1,9 +1,9 @@
 package com.devandroid.bakingapp;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.devandroid.bakingapp.Model.Recipe;
 
@@ -20,23 +19,29 @@ import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 
 public class RecipeActivity extends AppCompatActivity implements RecipeFragment.OnFragmentInteractionListener {
 
-    public static final String BUNDLE_DETAILS_EXTRA = "details_extra";
-    public static final String BUNDLE_FRAGMENT_EXTRA = "fragment_extra";
-    public static final String BUNDLE_STEP_EXTRA = "fragment_step_extra";
-    public static final String BUNDLE_EXTRA_RESULT = "extra_result";
-    public static final String BUNDLE_STEP_ACTIVITY = "step_activity";
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
-    private Recipe mRecipe;
-    private int mStep;
-    private boolean bLargeScreen;
-    RecipeFragment mRecipeFragment;
+
+    /**
+     * intent/bundle
+     */
+    public static final String EXTRA_RECIPE_ACT_STEP_ACT_OBJ = "extra_recipe_act_step_act_obj";
+    public static final String EXTRA_RECIPE_ACT_STEP_ACT_POS = "extra_recipe_act_step_act_pos";
+    public static final String EXTRA_STEP_ACT_RECIPE_ACT_OBJ = "extra_step_act_recipe_act_obj";
+    public static final String EXTRA_RECIPE_ACT_RECIPE_FRAG_OBJ = "extra_recipe_act_recipe_frag_obj";
+    public static final String EXTRA_RECIPE_ACT_RECIPE_FRAG_POS = "extra_recipe_act_recipe_frag_pos";
+    public static final String EXTRA_RECIPE_ACT_STEP_FRAG_OBJ = "extra_recipe_act_step_frag_obj";
+    public static final String EXTRA_RECIPE_ACT_STEP_FRAG_POS = "extra_recipe_act_step_frag_pos";
+    public static final String INTRA_RECIPE_ACT_POS = "intra_recipe_act_pos";
 
     @BindView(R.id.fl_fragment_list_steps) FrameLayout mFlListSteps;
     @BindView(R.id.fl_step_fragment) @Nullable FrameLayout mFlSteps;
+
+    private Recipe mRecipe;
+    private int mStep;
+    private boolean bLargeScreen;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -65,14 +70,15 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         /**
          * Gets the object passed by intent
          */
-        mRecipe = Parcels.unwrap(getIntent().getParcelableExtra(MainActivity.BUNDLE_DETAILS_EXTRA));
+        mRecipe = Parcels.unwrap(getIntent().getParcelableExtra(MainActivity.EXTRA_MAIN_ACT_RECIPE_ACT));
 
         if(savedInstanceState != null) {
-            mStep = savedInstanceState.getInt(BUNDLE_STEP_ACTIVITY);
+            mStep = savedInstanceState.getInt(INTRA_RECIPE_ACT_POS);
         }
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
+            actionBar.setBackgroundDrawable(new ColorDrawable(getColor(R.color.clSelectedBackground)));
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(mRecipe.getName());
         }
@@ -83,8 +89,8 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         if(savedInstanceState == null) {
             createUpdateFragment(true);
         } else {
-            mRecipeFragment = (RecipeFragment) getSupportFragmentManager().findFragmentById(R.id.fl_fragment_list_steps);
-            mRecipeFragment.setItemClick(mStep);
+            RecipeFragment frag = (RecipeFragment) getSupportFragmentManager().findFragmentById(R.id.fl_fragment_list_steps);
+            frag.setItemClick(mStep);
         }
     }
 
@@ -92,7 +98,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(BUNDLE_STEP_ACTIVITY, mStep);
+        outState.putInt(INTRA_RECIPE_ACT_POS, mStep);
     }
 
     @Override
@@ -105,8 +111,8 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             Class stepActivity = StepActivity.class;
             Intent intent = new Intent(context, stepActivity);
 
-            intent.putExtra(BUNDLE_DETAILS_EXTRA, Parcels.wrap(mRecipe));
-            intent.putExtra(BUNDLE_STEP_EXTRA, position);
+            intent.putExtra(EXTRA_RECIPE_ACT_STEP_ACT_OBJ, Parcels.wrap(mRecipe));
+            intent.putExtra(EXTRA_RECIPE_ACT_STEP_ACT_POS, position);
             startActivityForResult(intent, 1);
         } else {
 
@@ -119,11 +125,11 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
         if(requestCode==1) {
             if(resultCode == Activity.RESULT_OK){
-                mStep = data.getIntExtra(BUNDLE_EXTRA_RESULT, 0);
-                Log.d(LOG_TAG, "steps result: " + mStep);
-                if(mRecipeFragment!=null) {
-                    mRecipeFragment.setItemClick(mStep);
-                }
+                mStep = data.getIntExtra(EXTRA_STEP_ACT_RECIPE_ACT_OBJ, 0);
+
+                RecipeFragment frag = (RecipeFragment) getSupportFragmentManager().findFragmentById(R.id.fl_fragment_list_steps);
+                frag.setItemClick(mStep);
+
             }
         }
     }
@@ -131,22 +137,25 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     private void createUpdateFragment(boolean bCreate) {
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(BUNDLE_FRAGMENT_EXTRA, Parcels.wrap(mRecipe));
-        bundle.putInt(BUNDLE_STEP_EXTRA, mStep);
-
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if(bCreate) {
 
-            mRecipeFragment = new RecipeFragment();
-            mRecipeFragment.setArguments(bundle);
+            bundle.putParcelable(EXTRA_RECIPE_ACT_RECIPE_FRAG_OBJ, Parcels.wrap(mRecipe));
+            bundle.putInt(EXTRA_RECIPE_ACT_RECIPE_FRAG_POS, mStep);
+
+            RecipeFragment recipeFragment = new RecipeFragment();
+            recipeFragment.setArguments(bundle);
 
             fragmentManager.beginTransaction()
-                    .add(R.id.fl_fragment_list_steps, mRecipeFragment)
+                    .add(R.id.fl_fragment_list_steps, recipeFragment)
                     .commit();
         }
 
         if(bLargeScreen) {
+
+            bundle.putParcelable(EXTRA_RECIPE_ACT_STEP_FRAG_OBJ, Parcels.wrap(mRecipe));
+            bundle.putInt(EXTRA_RECIPE_ACT_STEP_FRAG_POS, mStep);
 
             StepFragment stepFragment = new StepFragment();
             stepFragment.setArguments(bundle);

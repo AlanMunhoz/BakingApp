@@ -25,16 +25,21 @@ import butterknife.ButterKnife;
 public class RecipeFragment extends Fragment implements MainAdapter.ListItemClickListener {
 
     private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
-    public static final String BUNDLE_STEP_FRAGMENT = "step_fragment";
+
+    /**
+     * intent/bundle
+     */
+    public static final String INTRA_RECIPE_FRAG_POS = "intra_recipe_frag_pos";
 
     @BindView(R.id.tv_ingredients) TextView mTvIngredients;
     @BindView(R.id.rv_steps) RecyclerView mRvSteps;
 
     private Recipe mRecipe;
+    private int mStep;
     private MainAdapter mAdapter;
     private OnFragmentInteractionListener mListener;
     private ArrayList<String> mStrSteps;
-    private int mStep;
+
 
     public interface OnFragmentInteractionListener {
         void onItemSelected(int position);
@@ -50,12 +55,12 @@ public class RecipeFragment extends Fragment implements MainAdapter.ListItemClic
         ButterKnife.bind(this, rootView);
 
         if (getArguments() != null) {
-            mRecipe = Parcels.unwrap(getArguments().getParcelable(RecipeActivity.BUNDLE_FRAGMENT_EXTRA));
-            mStep = getArguments().getInt(RecipeActivity.BUNDLE_STEP_EXTRA);
+            mRecipe = Parcels.unwrap(getArguments().getParcelable(RecipeActivity.EXTRA_RECIPE_ACT_RECIPE_FRAG_OBJ));
+            mStep = getArguments().getInt(RecipeActivity.EXTRA_RECIPE_ACT_RECIPE_FRAG_POS);
         }
 
         if(savedInstanceState!=null) {
-            mStep = savedInstanceState.getInt(BUNDLE_STEP_FRAGMENT, 0);
+            mStep = savedInstanceState.getInt(INTRA_RECIPE_FRAG_POS, 0);
         }
 
         String strIng = "";
@@ -85,7 +90,7 @@ public class RecipeFragment extends Fragment implements MainAdapter.ListItemClic
             if(savedInstanceState!=null) {
                 mAdapter.setListAdapter(mStrSteps, mStep);
             } else {
-                mAdapter.setListAdapter(mStrSteps, -1);
+                mAdapter.setListAdapter(mStrSteps, 0);
             }
         }
         return rootView;
@@ -95,7 +100,7 @@ public class RecipeFragment extends Fragment implements MainAdapter.ListItemClic
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(BUNDLE_STEP_FRAGMENT, mStep);
+        outState.putInt(INTRA_RECIPE_FRAG_POS, mStep);
     }
 
     @Override

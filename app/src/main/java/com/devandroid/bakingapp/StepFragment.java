@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,15 +34,19 @@ import butterknife.ButterKnife;
 public class StepFragment extends Fragment {
 
     private static final String LOG_TAG = StepFragment.class.getSimpleName();
-    public static final String BUNDLE_LAST_TIME_VIDEO_EXTRA = "last_time_video";
+
+    /**
+     * intent/bundle
+     */
+    public static final String INTRA_STEP_FRAG_TIMEVIDEO = "intra_step_frag_timevideo";
 
     @BindView(R.id.tv_step) TextView mTvStep;
     @BindView(R.id.ep_player_view) SimpleExoPlayerView mPlayerView;
     @BindView(R.id.iv_none_video) ImageView mNoneVideo;
 
-    private SimpleExoPlayer mExoPlayer;
     private Recipe mRecipe;
     private int mStep;
+    private SimpleExoPlayer mExoPlayer;
     private long mLastTimeVideo = 0;
 
     public StepFragment() { }
@@ -54,12 +59,17 @@ public class StepFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         if (getArguments() != null) {
-            mRecipe = Parcels.unwrap(getArguments().getParcelable(StepActivity.BUNDLE_FRAGMENT_EXTRA));
-            mStep = getArguments().getInt(StepActivity.BUNDLE_STEP_EXTRA);
+            if(getActivity() instanceof StepActivity) {
+                mRecipe = Parcels.unwrap(getArguments().getParcelable(StepActivity.EXTRA_STEP_ACT_STEP_FRAG_OBJ));
+                mStep = getArguments().getInt(StepActivity.EXTRA_STEP_ACT_STEP_FRAG_POS);
+            } else {
+                mRecipe = Parcels.unwrap(getArguments().getParcelable(RecipeActivity.EXTRA_RECIPE_ACT_STEP_FRAG_OBJ));
+                mStep = getArguments().getInt(RecipeActivity.EXTRA_RECIPE_ACT_STEP_FRAG_POS);
+            }
         }
 
         if(savedInstanceState!=null) {
-            mLastTimeVideo = savedInstanceState.getLong(BUNDLE_LAST_TIME_VIDEO_EXTRA, 0);
+            mLastTimeVideo = savedInstanceState.getLong(INTRA_STEP_FRAG_TIMEVIDEO, 0);
         }
 
 
@@ -75,6 +85,8 @@ public class StepFragment extends Fragment {
         } else {
             mNoneVideo.setVisibility(View.GONE);
             mPlayerView.setVisibility(View.VISIBLE);
+            //Log.d("27092018", "width: " + getActivity().findViewById(R.id.fl_step_fragment).getWidth());
+            //mPlayerView.setMinimumHeight(getActivity().findViewById(R.id.fl_step_fragment).getWidth());
             initializePlayer(Uri.parse(step.getmVideoUrl()));
         }
 
@@ -85,7 +97,7 @@ public class StepFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putLong(BUNDLE_LAST_TIME_VIDEO_EXTRA, mLastTimeVideo);
+        outState.putLong(INTRA_STEP_FRAG_TIMEVIDEO, mLastTimeVideo);
     }
 
     @Override
@@ -105,22 +117,26 @@ public class StepFragment extends Fragment {
 
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
-            // Create an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
-            mPlayerView.setPlayer(mExoPlayer);
-            // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
-            MediaSource mediaSource = new ExtractorMediaSource(
-                    mediaUri,
-                    new DefaultDataSourceFactory(getActivity(), userAgent),
-                    new DefaultExtractorsFactory(),
-                    null,
-                    null);
-            mExoPlayer.seekTo(mLastTimeVideo);
-            mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            try {
+                // Create an instance of the ExoPlayer.
+                TrackSelector trackSelector = new DefaultTrackSelector();
+                LoadControl loadControl = new DefaultLoadControl();
+                mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+                mPlayerView.setPlayer(mExoPlayer);
+                // Prepare the MediaSource.
+                String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
+                MediaSource mediaSource = new ExtractorMediaSource(
+                        mediaUri,
+                        new DefaultDataSourceFactory(getActivity(), userAgent),
+                        new DefaultExtractorsFactory(),
+                        null,
+                        null);
+                mExoPlayer.seekTo(mLastTimeVideo);
+                mExoPlayer.prepare(mediaSource);
+                mExoPlayer.setPlayWhenReady(true);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

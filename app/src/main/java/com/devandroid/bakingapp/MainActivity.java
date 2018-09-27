@@ -2,6 +2,8 @@ package com.devandroid.bakingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,13 +21,17 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainAdapter.ListItemClickListener {
 
-    public static final String BUNDLE_DETAILS_EXTRA = "details_extra";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    /**
+     * intent/bundle
+     */
+    public static final String EXTRA_MAIN_ACT_RECIPE_ACT = "extra_main_act_recipe_act";
 
     @BindView(R.id.rv_list) RecyclerView mRvList;
 
     private MainAdapter mAdapter;
-    ArrayList<Recipe> lstRecipe;
+    private ArrayList<Recipe> lstRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null) {
+            actionBar.setBackgroundDrawable(new ColorDrawable(getColor(R.color.clSelectedBackground)));
+        }
 
         try {
             lstRecipe = JSON.ParseRecipe(this);
@@ -57,20 +68,16 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
             }
             mAdapter.setListAdapter(strRecipe, -1);
         }
-
-
     }
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
 
-        //Toast.makeText(this, lstRecipe.get(clickedItemIndex).getName(), Toast.LENGTH_SHORT).show();
-
         Context context = MainActivity.this;
         Class detailsActivity = RecipeActivity.class;
         Intent intent = new Intent(context, detailsActivity);
 
-        intent.putExtra(BUNDLE_DETAILS_EXTRA, Parcels.wrap(lstRecipe.get(clickedItemIndex)));
+        intent.putExtra(EXTRA_MAIN_ACT_RECIPE_ACT, Parcels.wrap(lstRecipe.get(clickedItemIndex)));
         startActivity(intent);
     }
 }

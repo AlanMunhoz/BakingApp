@@ -4,11 +4,12 @@
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="clLightText">#FFFFFF</color>
+    <color name="clBlackText">#000000</color>
+    <color name="clLightText">#ffffff</color>
     <color name="clDarkText">#FF424242</color>
 
-    <color name="clLightBackground">#FFFFFF</color>
-    <color name="clDarkBackground">#FF424242</color>
+    <color name="clUnselectedBackground">#FFFFFF</color>
+    <color name="clSelectedBackground">#17a589</color>
 
 
 </resources>

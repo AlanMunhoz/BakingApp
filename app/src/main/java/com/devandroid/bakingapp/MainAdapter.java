@@ -77,10 +77,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ListViewHolder
             tvRecipe.setText(mListItems.get(listIndex));
 
             if(listIndex != mLastItemClicked) {
-                cvCardview.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.clLightBackground));
+                cvCardview.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.clUnselectedBackground));
                 tvRecipe.setTextColor(ContextCompat.getColor(mContext, R.color.clDarkText));
             } else {
-                cvCardview.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.clDarkBackground));
+                cvCardview.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.clSelectedBackground));
                 tvRecipe.setTextColor(ContextCompat.getColor(mContext, R.color.clLightText));
             }
         }
@@ -94,7 +94,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ListViewHolder
                 notifyItemChanged(mLastItemClicked);
             }
 
-            cvCardview.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.clDarkBackground));
+            cvCardview.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.clSelectedBackground));
             tvRecipe.setTextColor(ContextCompat.getColor(mContext, R.color.clLightText));
             mLastItemClicked = clickedPosition;
 
