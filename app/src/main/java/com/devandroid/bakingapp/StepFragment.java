@@ -42,7 +42,7 @@ public class StepFragment extends Fragment {
     private SimpleExoPlayer mExoPlayer;
     private Recipe mRecipe;
     private int mStep;
-    private long mLastTimeVideo;
+    private long mLastTimeVideo = 0;
 
     public StepFragment() { }
 
@@ -85,8 +85,16 @@ public class StepFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        mLastTimeVideo = mExoPlayer.getCurrentPosition();
         outState.putLong(BUNDLE_LAST_TIME_VIDEO_EXTRA, mLastTimeVideo);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if(mExoPlayer != null) {
+            mLastTimeVideo = mExoPlayer.getCurrentPosition();
+        }
     }
 
     @Override

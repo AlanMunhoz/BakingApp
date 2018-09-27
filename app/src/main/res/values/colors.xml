@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="clLightText">#FFFFFF</color>
+    <color name="clDarkText">#FF424242</color>
+
+    <color name="clLightBackground">#FFFFFF</color>
+    <color name="clDarkBackground">#FF424242</color>
+
+
 </resources>

@@ -1,6 +1,7 @@
 package com.devandroid.bakingapp;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -27,10 +28,12 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     public static final String BUNDLE_FRAGMENT_EXTRA = "fragment_extra";
     public static final String BUNDLE_STEP_EXTRA = "fragment_step_extra";
     public static final String BUNDLE_EXTRA_RESULT = "extra_result";
+    public static final String BUNDLE_STEP_ACTIVITY = "step_activity";
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
     private Recipe mRecipe;
     private int mStep;
     private boolean bLargeScreen;
+    RecipeFragment mRecipeFragment;
 
     @BindView(R.id.fl_fragment_list_steps) FrameLayout mFlListSteps;
     @BindView(R.id.fl_step_fragment) @Nullable FrameLayout mFlSteps;
@@ -64,6 +67,10 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
          */
         mRecipe = Parcels.unwrap(getIntent().getParcelableExtra(MainActivity.BUNDLE_DETAILS_EXTRA));
 
+        if(savedInstanceState != null) {
+            mStep = savedInstanceState.getInt(BUNDLE_STEP_ACTIVITY);
+        }
+
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -74,9 +81,18 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
          * Create new fragment only if there aren't any already created
          */
         if(savedInstanceState == null) {
-
             createUpdateFragment(true);
+        } else {
+            mRecipeFragment = (RecipeFragment) getSupportFragmentManager().findFragmentById(R.id.fl_fragment_list_steps);
+            mRecipeFragment.setItemClick(mStep);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(BUNDLE_STEP_ACTIVITY, mStep);
     }
 
     @Override
@@ -104,46 +120,42 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         if(requestCode==1) {
             if(resultCode == Activity.RESULT_OK){
                 mStep = data.getIntExtra(BUNDLE_EXTRA_RESULT, 0);
-                Toast.makeText(this, "Step: " + Integer.toString(mStep), Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG, "steps result: " + mStep);
+                if(mRecipeFragment!=null) {
+                    mRecipeFragment.setItemClick(mStep);
+                }
             }
         }
     }
 
     private void createUpdateFragment(boolean bCreate) {
 
-        RecipeFragment recipeFragment = new RecipeFragment();
-
         Bundle bundle = new Bundle();
         bundle.putParcelable(BUNDLE_FRAGMENT_EXTRA, Parcels.wrap(mRecipe));
-        recipeFragment.setArguments(bundle);
+        bundle.putInt(BUNDLE_STEP_EXTRA, mStep);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if(bCreate) {
-            Log.d(LOG_TAG, "Criando fragments");
+
+            mRecipeFragment = new RecipeFragment();
+            mRecipeFragment.setArguments(bundle);
+
             fragmentManager.beginTransaction()
-                    .add(R.id.fl_fragment_list_steps, recipeFragment)
+                    .add(R.id.fl_fragment_list_steps, mRecipeFragment)
                     .commit();
         }
 
         if(bLargeScreen) {
 
             StepFragment stepFragment = new StepFragment();
-
-            bundle = new Bundle();
-            bundle.putParcelable(BUNDLE_FRAGMENT_EXTRA, Parcels.wrap(mRecipe));
-            bundle.putInt(BUNDLE_STEP_EXTRA, mStep);
             stepFragment.setArguments(bundle);
 
-            fragmentManager = getSupportFragmentManager();
-
             if (bCreate) {
-                Log.d(LOG_TAG, "Criando fragments");
                 fragmentManager.beginTransaction()
                         .add(R.id.fl_step_fragment, stepFragment)
                         .commit();
             } else {
-                Log.d(LOG_TAG, "Atualizando fragments");
                 fragmentManager.beginTransaction()
                         .replace(R.id.fl_step_fragment, stepFragment)
                         .commit();

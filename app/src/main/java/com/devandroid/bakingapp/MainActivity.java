@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
             for(Recipe recipe: lstRecipe) {
                 strRecipe.add(recipe.getName());
             }
-            mAdapter.setListAdapter(strRecipe);
+            mAdapter.setListAdapter(strRecipe, -1);
         }
 
 
