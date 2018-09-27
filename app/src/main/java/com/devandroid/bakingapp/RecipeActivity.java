@@ -3,16 +3,17 @@ package com.devandroid.bakingapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-
+import android.support.v7.widget.Toolbar;
 import com.devandroid.bakingapp.Model.Recipe;
 
 import org.parceler.Parcels;
@@ -56,16 +57,11 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        setContentView(R.layout.activity_recipe);
 
         ButterKnife.bind(this);
-
-        if(mFlSteps != null) {
-            bLargeScreen = true;
-        } else {
-            bLargeScreen = false;
-        }
 
         /**
          * Gets the object passed by intent
@@ -76,12 +72,27 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             mStep = savedInstanceState.getInt(INTRA_RECIPE_ACT_POS);
         }
 
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar!=null) {
-            actionBar.setBackgroundDrawable(new ColorDrawable(getColor(R.color.clSelectedBackground)));
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(mRecipe.getName());
+        if(mFlSteps != null) {
+            bLargeScreen = true;
+
+            ActionBar actionBar = getSupportActionBar();
+            if(actionBar!=null) {
+                actionBar.setBackgroundDrawable(new ColorDrawable(getColor(R.color.clSelectedBackground)));
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setTitle(mRecipe.getName());
+            }
+
+        } else {
+            bLargeScreen = false;
+
+            final Toolbar toolbar = findViewById(R.id.MyToolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapse_toolbar);
+            collapsingToolbarLayout.setTitle(mRecipe.getName());
+
         }
+
 
         /**
          * Create new fragment only if there aren't any already created

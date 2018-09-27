@@ -39,4 +39,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //Exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
+
+    implementation 'com.android.support:design:27.1.1'
+
 }
