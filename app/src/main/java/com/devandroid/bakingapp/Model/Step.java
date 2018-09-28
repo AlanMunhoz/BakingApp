@@ -1,14 +1,25 @@
 package com.devandroid.bakingapp.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.parceler.Parcel;
 
 @Parcel
 public class Step {
 
+    @SerializedName("id")
     int mId;
+
+    @SerializedName("shortDescription")
     String mShortDescription;
+
+    @SerializedName("description")
     String mDescription;
+
+    @SerializedName("videoUrl")
     String mVideoUrl;
+
+    @SerializedName("thumbnailUrl")
     String mThumbnailUrl;
 
     public Step() {}

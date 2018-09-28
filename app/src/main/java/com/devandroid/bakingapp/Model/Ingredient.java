@@ -1,12 +1,19 @@
 package com.devandroid.bakingapp.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.parceler.Parcel;
 
 @Parcel
 public class Ingredient {
 
+    @SerializedName("quantity")
     double mQuantity;
+
+    @SerializedName("measure")
     String mMeasure;
+
+    @SerializedName("description")
     String mDescription;
 
     public Ingredient() {}

@@ -1,5 +1,7 @@
 package com.devandroid.bakingapp.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -13,9 +15,16 @@ import java.util.ArrayList;
 @Parcel
 public class Recipe {
 
+    @SerializedName("id")
     int mId;
+
+    @SerializedName("name")
     String mName;
+
+    @SerializedName("ingredients")
     ArrayList<Ingredient> lstIngredients;
+
+    @SerializedName("steps")
     ArrayList<Step> lstSteps;
 
     public Recipe() { }

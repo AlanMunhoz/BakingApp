@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.devandroid.bakingapp.Model.Recipe;
+import com.devandroid.bakingapp.Retrofit.RetrofitClient;
 import com.devandroid.bakingapp.Util.JSON;
 
 import org.parceler.Parcels;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MainAdapter.ListItemClickListener {
+public class MainActivity extends AppCompatActivity implements MainAdapter.ListItemClickListener, RetrofitClient.listReceivedListenter {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -31,7 +33,8 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
     @BindView(R.id.rv_list) RecyclerView mRvList;
 
     private MainAdapter mAdapter;
-    private ArrayList<Recipe> lstRecipe;
+    private ArrayList<Recipe> mLstRecipe;
+    private RetrofitClient mRetrofitClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +48,6 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
             actionBar.setBackgroundDrawable(new ColorDrawable(getColor(R.color.clSelectedBackground)));
         }
 
-        try {
-            lstRecipe = JSON.ParseRecipe(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRvList.setLayoutManager(layoutManager);
         mRvList.setHasFixedSize(true);
@@ -58,6 +55,44 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
         mAdapter = new MainAdapter(MainActivity.this);
         mRvList.setAdapter(mAdapter);
 
+
+        try {
+            mLstRecipe = JSON.ParseRecipe(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Write list with name of recipes
+        if(mLstRecipe!=null) {
+            ArrayList<String> strRecipe = new ArrayList();
+            for(Recipe recipe: mLstRecipe) {
+                strRecipe.add(recipe.getName());
+            }
+            mAdapter.setListAdapter(strRecipe, -1);
+        }
+
+
+        /*
+        mRetrofitClient = new RetrofitClient(this);
+        mRetrofitClient.getRequestRecipes();
+        */
+    }
+
+    @Override
+    public void onListItemClick(int clickedItemIndex) {
+
+        Context context = MainActivity.this;
+        Class detailsActivity = RecipeActivity.class;
+        Intent intent = new Intent(context, detailsActivity);
+
+        intent.putExtra(EXTRA_MAIN_ACT_RECIPE_ACT, Parcels.wrap(mLstRecipe.get(clickedItemIndex)));
+        startActivity(intent);
+    }
+
+    @Override
+    public void listReceived(ArrayList<Recipe> lstRecipe) {
+
+        mLstRecipe = lstRecipe;
+        Log.d("Retrofit", "listener alive");
         /**
          * Write list with name of recipes
          */
@@ -68,16 +103,5 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
             }
             mAdapter.setListAdapter(strRecipe, -1);
         }
-    }
-
-    @Override
-    public void onListItemClick(int clickedItemIndex) {
-
-        Context context = MainActivity.this;
-        Class detailsActivity = RecipeActivity.class;
-        Intent intent = new Intent(context, detailsActivity);
-
-        intent.putExtra(EXTRA_MAIN_ACT_RECIPE_ACT, Parcels.wrap(lstRecipe.get(clickedItemIndex)));
-        startActivity(intent);
     }
 }
