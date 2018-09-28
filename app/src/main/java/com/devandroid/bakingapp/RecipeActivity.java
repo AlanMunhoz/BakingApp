@@ -1,6 +1,8 @@
 package com.devandroid.bakingapp;
 
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -11,12 +13,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.support.v7.widget.Toolbar;
+import android.widget.RemoteViews;
+
+import com.devandroid.bakingapp.Model.Ingredient;
 import com.devandroid.bakingapp.Model.Recipe;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,6 +111,9 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             RecipeFragment frag = (RecipeFragment) getSupportFragmentManager().findFragmentById(R.id.fl_fragment_list_steps);
             frag.setItemClick(mStep);
         }
+
+        startWidgetService();
+
     }
 
     @Override
@@ -182,4 +193,27 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             }
         }
     }
+
+    void startWidgetService()
+    {
+
+        String strIng = "";
+        ArrayList<String> lstIngredients = new ArrayList<>();
+        for(Ingredient ingredient: mRecipe.getLstIngredients()) {
+            String strLine = ingredient.getmDescription() + " " +
+                    Double.toString(ingredient.getmQuantity()) + " " +
+                    ingredient.getmMeasure();
+            strIng += " -" + " " + strLine + "\n";
+            lstIngredients.add(strLine);
+        }
+
+
+
+        RemoteViews view = new RemoteViews(getPackageName(), R.layout.baking_app_provider);
+        view.setTextViewText(R.id.appwidget_text, strIng);
+        ComponentName theWidget = new ComponentName(this, BakingAppProvider.class);
+        AppWidgetManager manager = AppWidgetManager.getInstance(this);
+        manager.updateAppWidget(theWidget, view);
+    }
+
 }
