@@ -24,7 +24,7 @@
             android:name=".StepActivity"
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar"></activity>
 
-        <receiver android:name=".BakingAppProvider">
+        <receiver android:name=".widget.BakingAppProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

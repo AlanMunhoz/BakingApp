@@ -1,4 +1,4 @@
-package com.devandroid.bakingapp;
+package com.devandroid.bakingapp.widget;
 
 import android.app.IntentService;
 import android.content.Intent;

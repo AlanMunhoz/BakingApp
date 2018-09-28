@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -13,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +19,7 @@ import android.widget.RemoteViews;
 
 import com.devandroid.bakingapp.Model.Ingredient;
 import com.devandroid.bakingapp.Model.Recipe;
+import com.devandroid.bakingapp.widget.BakingAppProvider;
 
 import org.parceler.Parcels;
 
