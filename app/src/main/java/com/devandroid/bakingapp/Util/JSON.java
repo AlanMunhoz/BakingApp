@@ -19,6 +19,9 @@ import java.util.ArrayList;
 public final class JSON {
 
     private static final String LOG_TAG = JSON.class.getSimpleName();
+
+    private static final String JSON_FILE = "recipe_list.json";
+
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "name";
     private static final String JSON_STEPS = "steps";
@@ -31,20 +34,14 @@ public final class JSON {
     private static final String JSON_VIDEO_URL = "videoURL";
     private static final String JSON_THUMBNAIL = "thumbnailURL";
 
-    /**
-     * ParseRecipe - Convert JSON string to Recipe list
-     * @param ctx
-     * @return ArrayList<Recipe>
-     * @throws JSONException
-     */
-    public static ArrayList<Recipe> ParseRecipe(Context ctx) throws JSONException {
+    public static String getStringFromFile(Context ctx) {
 
         /**
          * parse json file to string
          */
         String JSonString;
         try {
-            InputStream is = ctx.getAssets().open("recipe_list.json");
+            InputStream is = ctx.getAssets().open(JSON_FILE);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -54,6 +51,16 @@ public final class JSON {
             ex.printStackTrace();
             return null;
         }
+
+        return JSonString;
+    }
+
+    /**
+     * ParseRecipe - Convert JSON string to Recipe list
+     * @return ArrayList<Recipe>
+     * @throws JSONException
+     */
+    public static ArrayList<Recipe> ParseRecipe(String JSonString) throws JSONException {
 
         /**
          * convert json string to object

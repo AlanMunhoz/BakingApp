@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
 
 
         try {
-            mLstRecipe = JSON.ParseRecipe(this);
+            mLstRecipe = JSON.ParseRecipe(JSON.getStringFromFile(this));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
             }
             mAdapter.setListAdapter(strRecipe, -1);
         }
-
 
         /*
         mRetrofitClient = new RetrofitClient(this);
@@ -92,13 +91,14 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
     public void listReceived(ArrayList<Recipe> lstRecipe) {
 
         mLstRecipe = lstRecipe;
+
         Log.d("Retrofit", "listener alive");
         /**
          * Write list with name of recipes
          */
         if(lstRecipe!=null) {
             ArrayList<String> strRecipe = new ArrayList();
-            for(Recipe recipe: lstRecipe) {
+            for(Recipe recipe: mLstRecipe) {
                 strRecipe.add(recipe.getName());
             }
             mAdapter.setListAdapter(strRecipe, -1);
