@@ -33,6 +33,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baking_app_provider_info" />
         </receiver>
+
+        <service
+            android:name=".widget.RecipeService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

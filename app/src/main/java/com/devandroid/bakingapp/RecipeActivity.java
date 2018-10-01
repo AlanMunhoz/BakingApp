@@ -6,12 +6,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +22,7 @@ import android.widget.RemoteViews;
 import com.devandroid.bakingapp.Model.Ingredient;
 import com.devandroid.bakingapp.Model.Recipe;
 import com.devandroid.bakingapp.widget.BakingAppProvider;
+import com.devandroid.bakingapp.widget.RecipeService;
 
 import org.parceler.Parcels;
 
@@ -208,11 +211,21 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
 
 
+        Log.d("01102018", "RecipeActivity -> startWidgetService");
         RemoteViews view = new RemoteViews(getPackageName(), R.layout.baking_app_provider);
-        view.setTextViewText(R.id.appwidget_text, strIng);
+        view.setTextViewText(R.id.appwidget_text, mRecipe.getName());
+
         ComponentName theWidget = new ComponentName(this, BakingAppProvider.class);
         AppWidgetManager manager = AppWidgetManager.getInstance(this);
+
         manager.updateAppWidget(theWidget, view);
+
+
+
+
+
+
+
     }
 
 }
