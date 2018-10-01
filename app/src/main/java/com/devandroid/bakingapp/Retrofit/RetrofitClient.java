@@ -14,6 +14,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
+    private static final String LOG_TAG = RetrofitClient.class.getSimpleName();
+    private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
+    public static final String FILE_NAME = "baking.json";
+
     private listReceivedListenter mListReceivedListenter;
 
     public interface listReceivedListenter {
@@ -27,7 +31,7 @@ public class RetrofitClient {
     public void getRequestRecipes() {
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -39,7 +43,7 @@ public class RetrofitClient {
                 try {
                     ArrayList<Recipe> lstRecipe = response.body();
                     mListReceivedListenter.listReceived(lstRecipe);
-                    Log.d("Retrofit", "Load successful with " + lstRecipe.size() + " elements!");
+                    Log.d(LOG_TAG, "Load successful with " + lstRecipe.size() + " elements!");
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
@@ -47,7 +51,7 @@ public class RetrofitClient {
 
             @Override
             public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
-                Log.e("Retrofit", "Retrofit load error");
+                Log.e(LOG_TAG, "Retrofit load error");
             }
         });
 

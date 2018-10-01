@@ -18,6 +18,7 @@ import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class StepActivity extends AppCompatActivity {
 
@@ -31,6 +32,20 @@ public class StepActivity extends AppCompatActivity {
 
     @BindView(R.id.btnBack) Button mBtnBack;
     @BindView(R.id.btnForward) Button mBtnForward;
+
+    @OnClick(R.id.btnBack) public void backClick() {
+        if(mStep>0) {
+            mStep--;
+            createUpdateFragment(false);
+        }
+    }
+
+    @OnClick(R.id.btnForward) public void forwardClick() {
+        if(mStep<mRecipe.getLstSteps().size()-1) {
+            mStep++;
+            createUpdateFragment(false);
+        }
+    }
 
     private Recipe mRecipe;
     private int mStep;
@@ -65,27 +80,6 @@ public class StepActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(mRecipe.getName());
         }
-
-        mBtnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mStep>0) {
-                    mStep--;
-
-                    createUpdateFragment(false);
-                }
-            }
-        });
-
-        mBtnForward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mStep<mRecipe.getLstSteps().size()-1) {
-                    mStep++;
-                    createUpdateFragment(false);
-                }
-            }
-        });
 
         /**
          * Create new fragment only if there aren't any already created

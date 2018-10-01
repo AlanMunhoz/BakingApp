@@ -13,7 +13,7 @@ public class Ingredient {
     @SerializedName("measure")
     String mMeasure;
 
-    @SerializedName("description")
+    @SerializedName("ingredient")
     String mDescription;
 
     public Ingredient() {}

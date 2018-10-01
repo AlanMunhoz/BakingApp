@@ -16,10 +16,10 @@ public class Step {
     @SerializedName("description")
     String mDescription;
 
-    @SerializedName("videoUrl")
+    @SerializedName("videoURL")
     String mVideoUrl;
 
-    @SerializedName("thumbnailUrl")
+    @SerializedName("thumbnailURL")
     String mThumbnailUrl;
 
     public Step() {}

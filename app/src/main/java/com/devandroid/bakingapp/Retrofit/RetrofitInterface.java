@@ -9,7 +9,7 @@ import retrofit2.http.GET;
 
 public interface RetrofitInterface {
 
-    @GET("baking.json")
+    @GET(RetrofitClient.FILE_NAME)
     Call<ArrayList<Recipe>> getRecipes();
 
 }

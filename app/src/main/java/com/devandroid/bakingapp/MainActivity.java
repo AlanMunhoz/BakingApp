@@ -55,7 +55,10 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
         mAdapter = new MainAdapter(MainActivity.this);
         mRvList.setAdapter(mAdapter);
 
-
+        /**
+         * Start development with local data
+        */
+        /*
         try {
             mLstRecipe = JSON.ParseRecipe(JSON.getStringFromFile(this));
         } catch (Exception e) {
@@ -69,11 +72,14 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.ListI
             }
             mAdapter.setListAdapter(strRecipe, -1);
         }
+        */
 
-        /*
+        /**
+         * Load data with Retrofit
+         */
         mRetrofitClient = new RetrofitClient(this);
         mRetrofitClient.getRequestRecipes();
-        */
+
     }
 
     @Override
