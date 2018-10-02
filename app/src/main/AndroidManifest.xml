@@ -22,7 +22,9 @@
         <activity android:name=".RecipeActivity" />
         <activity
             android:name=".StepActivity"
-            android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar"></activity>
+            android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
+
+        </activity>
 
         <receiver android:name=".widget.BakingAppProvider">
             <intent-filter>

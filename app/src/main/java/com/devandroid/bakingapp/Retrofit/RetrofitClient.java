@@ -22,6 +22,7 @@ public class RetrofitClient {
 
     public interface listReceivedListenter {
         void listReceived(ArrayList<Recipe> lstRecipe);
+        void loadFailure();
     }
 
     public RetrofitClient(listReceivedListenter listener) {
@@ -51,7 +52,8 @@ public class RetrofitClient {
 
             @Override
             public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
-                Log.e(LOG_TAG, "Retrofit load error");
+                mListReceivedListenter.loadFailure();
+                Log.d(LOG_TAG, "Retrofit load error");
             }
         });
 

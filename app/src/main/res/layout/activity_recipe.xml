@@ -23,9 +23,10 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
+                android:id="@+id/ivImageRecipe"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/none_video"/>
+                android:layout_height="250dp"
+                android:scaleType="centerCrop" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/MyToolbar"

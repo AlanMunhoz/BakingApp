@@ -10,9 +10,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 
 import com.devandroid.bakingapp.Model.Ingredient;
 import com.devandroid.bakingapp.Model.Recipe;
@@ -43,6 +45,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     public static final String INTRA_RECIPE_ACT_POS = "intra_recipe_act_pos";
 
     @BindView(R.id.fl_fragment_list_steps) FrameLayout mFlListSteps;
+    @BindView(R.id.ivImageRecipe) ImageView mImageRecipe;
     @BindView(R.id.fl_step_fragment) @Nullable FrameLayout mFlSteps;
 
     private Recipe mRecipe;
@@ -90,11 +93,17 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         } else {
             bLargeScreen = false;
 
+            setBackgroundImage();
+
             final Toolbar toolbar = findViewById(R.id.MyToolbar);
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapse_toolbar);
             collapsingToolbarLayout.setTitle(mRecipe.getName());
+
+            //collapsingToolbarLayout.setExpandedTitleColor(getColor(R.color.clLightText));
+            collapsingToolbarLayout.setCollapsedTitleTextColor(getColor(R.color.clLightText));
+            collapsingToolbarLayout.setContentScrimColor(getColor(R.color.clSelectedBackground));
 
         }
 
@@ -191,7 +200,20 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         }
     }
 
-    void startWidgetService()
+    private void setBackgroundImage() {
+
+        if(mRecipe.getName().equalsIgnoreCase(getResources().getResourceEntryName(R.drawable.nutella_pie).replace("_", " "))) {
+            mImageRecipe.setImageResource(R.drawable.nutella_pie);
+        } else if(mRecipe.getName().equalsIgnoreCase(getResources().getResourceEntryName(R.drawable.brownies).replace("_", " "))) {
+            mImageRecipe.setImageResource(R.drawable.brownies);
+        } else if(mRecipe.getName().equalsIgnoreCase(getResources().getResourceEntryName(R.drawable.yellow_cake).replace("_", " "))) {
+            mImageRecipe.setImageResource(R.drawable.yellow_cake);
+        } else if(mRecipe.getName().equalsIgnoreCase(getResources().getResourceEntryName(R.drawable.cheesecake).replace("_", " "))) {
+            mImageRecipe.setImageResource(R.drawable.cheesecake);
+        }
+    }
+
+    private void startWidgetService()
     {
 
         ArrayList<String> lstIngredients = new ArrayList<>();
