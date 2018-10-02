@@ -46,6 +46,7 @@ public class StepFragment extends Fragment {
 
     private Recipe mRecipe;
     private int mStep;
+    private Step mActualStep;
     private SimpleExoPlayer mExoPlayer;
     private long mLastTimeVideo = 0;
 
@@ -74,12 +75,12 @@ public class StepFragment extends Fragment {
 
 
         String strStep;
-        Step step = mRecipe.getLstSteps().get(mStep);
-        strStep = Integer.toString(step.getmId()) + ". " + step.getmShortDescription();
+        mActualStep = mRecipe.getLstSteps().get(mStep);
+        strStep = Integer.toString(mActualStep.getmId()) + ". " + mActualStep.getmShortDescription();
         mTvStep.setText(strStep);
 
         // Initialize the player.
-        if(step.getmVideoUrl().isEmpty()) {
+        if(mActualStep.getmVideoUrl().isEmpty()) {
             mNoneVideo.setVisibility(View.VISIBLE);
             mPlayerView.setVisibility(View.GONE);
         } else {
@@ -87,7 +88,7 @@ public class StepFragment extends Fragment {
             mPlayerView.setVisibility(View.VISIBLE);
             //Log.d("27092018", "width: " + getActivity().findViewById(R.id.fl_step_fragment).getWidth());
             //mPlayerView.setMinimumHeight(getActivity().findViewById(R.id.fl_step_fragment).getWidth());
-            initializePlayer(Uri.parse(step.getmVideoUrl()));
+            initializePlayer(Uri.parse(mActualStep.getmVideoUrl()));
         }
 
         return rootView;
@@ -101,11 +102,19 @@ public class StepFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        initializePlayer(Uri.parse(mActualStep.getmVideoUrl()));
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
 
         if(mExoPlayer != null) {
+            mExoPlayer.stop();
             mLastTimeVideo = mExoPlayer.getCurrentPosition();
+            releasePlayer();
         }
     }
 
