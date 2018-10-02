@@ -1,29 +1,22 @@
 package com.devandroid.bakingapp;
 
 import android.app.Activity;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.preference.Preference;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.support.v7.widget.Toolbar;
-import android.widget.RemoteViews;
 
 import com.devandroid.bakingapp.Model.Ingredient;
 import com.devandroid.bakingapp.Model.Recipe;
 import com.devandroid.bakingapp.Util.Preferences;
-import com.devandroid.bakingapp.widget.BakingAppProvider;
 import com.devandroid.bakingapp.widget.RecipeService;
 
 import org.parceler.Parcels;
@@ -201,33 +194,18 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     void startWidgetService()
     {
 
-        String strIng = "";
         ArrayList<String> lstIngredients = new ArrayList<>();
         for(Ingredient ingredient: mRecipe.getLstIngredients()) {
             String strLine = ingredient.getmDescription() + " " +
                     Double.toString(ingredient.getmQuantity()) + " " +
                     ingredient.getmMeasure();
-            strIng += " -" + " " + strLine + "\n";
             lstIngredients.add(strLine);
         }
 
-
-
-        Log.d("01102018", "RecipeActivity -> startWidgetService");
-        RemoteViews view = new RemoteViews(getPackageName(), R.layout.baking_app_provider);
-        view.setTextViewText(R.id.appwidget_text, mRecipe.getName());
-
-        ComponentName theWidget = new ComponentName(this, BakingAppProvider.class);
-        AppWidgetManager manager = AppWidgetManager.getInstance(this);
-
-        manager.updateAppWidget(theWidget, view);
-
-
         Preferences.saveStringList(this, lstIngredients);
+        Preferences.saveStringRecipe(this, mRecipe.getName());
 
-
-
-
+        RecipeService.startUpdateIngredients(this);
 
     }
 
