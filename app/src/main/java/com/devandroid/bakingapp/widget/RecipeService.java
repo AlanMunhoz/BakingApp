@@ -3,6 +3,7 @@ package com.devandroid.bakingapp.widget;
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,15 +12,23 @@ import android.widget.RemoteViewsService;
 
 import java.util.ArrayList;
 
-public class RecipeService extends /*IntentService { */ RemoteViewsService {
+public class RecipeService extends /*IntentService {*/ RemoteViewsService {
 
-    /*
+/*
     public static final String MY_ACTION_ = "com.devandroid.bakingapp.action.my_action";
     public static final String ACTION_UPDATE_RECIPE_STEP_ = "com.devandroid.bakingapp.action.update_recipe_step";
 
     public RecipeService(String name) {
         super(name);
     }
+
+    public static void startUpdateRecipeStep(Context context) {
+        Intent intent = new Intent(context, RecipeService.class);
+        intent.setAction(ACTION_UPDATE_RECIPE_STEP_);
+        //intent.putExtra(EXTRA_PLANT_ID, plantId);
+        context.startService(intent);
+    }
+
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
@@ -36,8 +45,10 @@ public class RecipeService extends /*IntentService { */ RemoteViewsService {
 
     private void handleMyAction() { }
 
-    private void handleActionUpdateRecipeStep(@Nullable Intent intent) { }
-    */
+    private void handleActionUpdateRecipeStep(@Nullable Intent intent) {
+
+    }
+*/
 
 
 
@@ -56,6 +67,7 @@ public class RecipeService extends /*IntentService { */ RemoteViewsService {
 
         return new ListProvider(this.getApplicationContext(), intent, lstAdapter);
     }
+
 
     /*
     @Override

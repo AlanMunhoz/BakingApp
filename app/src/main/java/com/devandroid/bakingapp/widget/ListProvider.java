@@ -10,6 +10,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
 import com.devandroid.bakingapp.R;
+import com.devandroid.bakingapp.Util.Preferences;
 
 /**
  * If you are familiar with Adapter of ListView,this is the same as adapter
@@ -32,11 +33,13 @@ public class ListProvider implements RemoteViewsFactory {
     }
 
     private void populateListItem() {
+        /*
         for (int i = 0; i < 10; i++) {
             ArrayList<String> listItem = new ArrayList<>();
             listItemList.add(i + " This is the content of the app widget listview.Nice content though");
         }
-
+        */
+        listItemList = Preferences.restoreStringList(context);
     }
 
     @Override

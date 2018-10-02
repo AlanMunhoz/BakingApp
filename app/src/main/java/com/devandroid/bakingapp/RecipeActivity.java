@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.preference.Preference;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,7 @@ import android.widget.RemoteViews;
 
 import com.devandroid.bakingapp.Model.Ingredient;
 import com.devandroid.bakingapp.Model.Recipe;
+import com.devandroid.bakingapp.Util.Preferences;
 import com.devandroid.bakingapp.widget.BakingAppProvider;
 import com.devandroid.bakingapp.widget.RecipeService;
 
@@ -221,6 +223,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         manager.updateAppWidget(theWidget, view);
 
 
+        Preferences.saveStringList(this, lstIngredients);
 
 
 
