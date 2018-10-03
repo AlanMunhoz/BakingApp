@@ -2,7 +2,6 @@ package com.devandroid.bakingapp.Util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.Preference;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -30,23 +30,21 @@ public class BakingAppProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         RemoteViews rv;
-        rv = getGardenGridRemoteView(context);
+        rv = getWidgetRemoteView(context);
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
 
-    private static RemoteViews getGardenGridRemoteView(Context context) {
+    private static RemoteViews getWidgetRemoteView(Context context) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_provider);
-        // Set the GridWidgetService intent to act as the adapter for the GridView
+
         Intent intent = new Intent(context, ListWidgetService.class);
         views.setRemoteAdapter(R.id.listViewWidget, intent);
-        // Set the PlantDetailActivity intent to launch when clicked
+
         Intent appIntent = new Intent(context, MainActivity.class);
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.listViewWidget, appPendingIntent);
-        //Nome da receita
+
         views.setTextViewText(R.id.appwidget_text, Preferences.restoreStringRecipe(context));
-        // Handle empty gardens
-        //views.setEmptyView(R.id.listViewWidget, R.id.appwidget_text);
 
         return views;
     }

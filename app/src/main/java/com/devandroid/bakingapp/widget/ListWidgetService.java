@@ -64,7 +64,7 @@ class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getViewTypeCount() {
-        return 1; // Treat all items in the GridView the same
+        return 1;
     }
 
     @Override

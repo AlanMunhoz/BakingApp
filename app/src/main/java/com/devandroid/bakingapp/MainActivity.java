@@ -2,8 +2,11 @@ package com.devandroid.bakingapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.devandroid.bakingapp.Espresso.EspressoIdlingResource;
 import com.devandroid.bakingapp.Model.Recipe;
 import com.devandroid.bakingapp.Retrofit.RetrofitClient;
 import com.devandroid.bakingapp.Util.JSON;
@@ -22,6 +26,7 @@ import com.devandroid.bakingapp.Util.JSON;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +48,26 @@ public class MainActivity extends AppCompatActivity
     private MainAdapter mAdapter;
     private ArrayList<Recipe> mLstRecipe;
     private RetrofitClient mRetrofitClient;
+
+    @Nullable
+    private EspressoIdlingResource mIdlingResource;
+    public static int mListSize = 3;
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new EspressoIdlingResource();
+            setIdleState(false);
+        }
+        return mIdlingResource;
+    }
+
+    private void setIdleState(Boolean state) {
+        if(mIdlingResource != null) {
+            mIdlingResource.setIdleState(state);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,21 +93,7 @@ public class MainActivity extends AppCompatActivity
         /**
          * Start development with local data
         */
-        /*
-        try {
-            mLstRecipe = JSON.ParseRecipe(JSON.getStringFromFile(this));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Write list with name of recipes
-        if(mLstRecipe!=null) {
-            ArrayList<String> strRecipe = new ArrayList();
-            for(Recipe recipe: mLstRecipe) {
-                strRecipe.add(recipe.getName());
-            }
-            mAdapter.setListAdapter(strRecipe, -1);
-        }
-        */
+        //populateListWithLocalData();
 
         /**
          * Load data with Retrofit
@@ -90,7 +101,6 @@ public class MainActivity extends AppCompatActivity
         mProgressbar.setVisibility(View.VISIBLE);
         mRetrofitClient = new RetrofitClient(this);
         mRetrofitClient.getRequestRecipes();
-
     }
 
     @Override
@@ -109,9 +119,9 @@ public class MainActivity extends AppCompatActivity
 
         mProgressbar.setVisibility(View.INVISIBLE);
         mSwipeRefresh.setRefreshing(false);
+        setIdleState(true);
         mLstRecipe = lstRecipe;
 
-        Log.d("Retrofit", "listener alive");
         /**
          * Write list with name of recipes
          */
@@ -129,6 +139,7 @@ public class MainActivity extends AppCompatActivity
 
         mProgressbar.setVisibility(View.INVISIBLE);
         mSwipeRefresh.setRefreshing(false);
+        setIdleState(true);
         Toast.makeText(this, getString(R.string.load_error), Toast.LENGTH_SHORT).show();
     }
 
@@ -139,5 +150,21 @@ public class MainActivity extends AppCompatActivity
 
         mRetrofitClient = new RetrofitClient(this);
         mRetrofitClient.getRequestRecipes();
+    }
+
+    public void populateListWithLocalData() {
+
+        try {
+            mLstRecipe = JSON.ParseRecipe(JSON.getStringFromFile(this));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(mLstRecipe!=null) {
+            ArrayList<String> strRecipe = new ArrayList();
+            for(Recipe recipe: mLstRecipe) {
+                strRecipe.add(recipe.getName());
+            }
+            mAdapter.setListAdapter(strRecipe, -1);
+        }
     }
 }

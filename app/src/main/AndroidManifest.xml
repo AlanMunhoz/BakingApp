@@ -23,14 +23,12 @@
         <activity
             android:name=".StepActivity"
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
-
         </activity>
 
         <receiver android:name=".widget.BakingAppProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baking_app_provider_info" />
@@ -39,6 +37,7 @@
         <service
             android:name=".widget.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

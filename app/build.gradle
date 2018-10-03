@@ -37,13 +37,22 @@ dependencies {
     // butter knife dependence
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    //Exoplayer
+    // Exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
-
+    // NestedScrollView and CollapseToolbar
     implementation 'com.android.support:design:27.1.1'
-
+    // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    // Testing-only dependencies (Espresso)
+    androidTestImplementation 'com.android.support:support-annotations:27.1.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
+    implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.2'
 
 
 }

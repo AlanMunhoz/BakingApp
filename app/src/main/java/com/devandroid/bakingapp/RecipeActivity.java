@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.support.v7.widget.Toolbar;
@@ -45,7 +44,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     public static final String INTRA_RECIPE_ACT_POS = "intra_recipe_act_pos";
 
     @BindView(R.id.fl_fragment_list_steps) FrameLayout mFlListSteps;
-    @BindView(R.id.ivImageRecipe) ImageView mImageRecipe;
+    @BindView(R.id.ivImageRecipe) @Nullable ImageView mImageRecipe;
     @BindView(R.id.fl_step_fragment) @Nullable FrameLayout mFlSteps;
 
     private Recipe mRecipe;
@@ -101,7 +100,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapse_toolbar);
             collapsingToolbarLayout.setTitle(mRecipe.getName());
 
-            //collapsingToolbarLayout.setExpandedTitleColor(getColor(R.color.clLightText));
+            collapsingToolbarLayout.setExpandedTitleColor(getColor(R.color.clDarkText));
             collapsingToolbarLayout.setCollapsedTitleTextColor(getColor(R.color.clLightText));
             collapsingToolbarLayout.setContentScrimColor(getColor(R.color.clSelectedBackground));
 
