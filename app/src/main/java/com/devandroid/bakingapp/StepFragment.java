@@ -85,8 +85,6 @@ public class StepFragment extends Fragment {
         } else {
             mNoneVideo.setVisibility(View.GONE);
             mPlayerView.setVisibility(View.VISIBLE);
-            //Log.d("27092018", "width: " + getActivity().findViewById(R.id.fl_step_fragment).getWidth());
-            //mPlayerView.setMinimumHeight(getActivity().findViewById(R.id.fl_step_fragment).getWidth());
             initializePlayer(Uri.parse(mActualStep.getmVideoUrl()));
         }
 
