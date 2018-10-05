@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/previous_menu"
+        android:orderInCategory="1"
+        app:showAsAction="always"
+        android:icon="@mipmap/baseline_skip_previous_white_24"
+        android:title="previous"/>
+
+    <item
+        android:id="@+id/next_menu"
+        android:orderInCategory="2"
+        app:showAsAction="always"
+        android:icon="@mipmap/baseline_skip_next_white_24"
+        android:title="next"/>
+
+</menu>

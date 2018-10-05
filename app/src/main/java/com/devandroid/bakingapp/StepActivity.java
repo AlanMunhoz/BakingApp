@@ -28,6 +28,7 @@ public class StepActivity extends AppCompatActivity {
      */
     public static final String EXTRA_STEP_ACT_STEP_FRAG_OBJ = "extra_step_act_step_frag_obj";
     public static final String EXTRA_STEP_ACT_STEP_FRAG_POS = "extra_step_act_step_frag_pos";
+    public static final String INTRA_STEP_ACT_POS = "intra_step_act_pos";
 
     @BindView(R.id.btnBack) Button mBtnBack;
     @BindView(R.id.btnForward) Button mBtnForward;
@@ -35,19 +36,26 @@ public class StepActivity extends AppCompatActivity {
     @OnClick(R.id.btnBack) public void backClick() {
         if(mStep>0) {
             mStep--;
-            createUpdateFragment(false);
+            createUpdateStepFragment(false);
         }
     }
 
     @OnClick(R.id.btnForward) public void forwardClick() {
         if(mStep<mRecipe.getLstSteps().size()-1) {
             mStep++;
-            createUpdateFragment(false);
+            createUpdateStepFragment(false);
         }
     }
 
     private Recipe mRecipe;
     private int mStep;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(INTRA_STEP_ACT_POS, mStep);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -73,6 +81,10 @@ public class StepActivity extends AppCompatActivity {
         mRecipe = Parcels.unwrap(getIntent().getParcelableExtra(RecipeActivity.EXTRA_RECIPE_ACT_STEP_ACT_OBJ));
         mStep = getIntent().getIntExtra(RecipeActivity.EXTRA_RECIPE_ACT_STEP_ACT_POS, 0);
 
+        if(savedInstanceState != null) {
+            mStep = savedInstanceState.getInt(INTRA_STEP_ACT_POS);
+        }
+
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
             actionBar.setBackgroundDrawable(new ColorDrawable(getColor(R.color.clSelectedBackground)));
@@ -85,7 +97,7 @@ public class StepActivity extends AppCompatActivity {
          */
         if(savedInstanceState == null) {
 
-            createUpdateFragment(true);
+            createUpdateStepFragment(true);
         }
     }
 
@@ -98,7 +110,7 @@ public class StepActivity extends AppCompatActivity {
         finish();
     }
 
-    private void createUpdateFragment(boolean bCreate) {
+    private void createUpdateStepFragment(boolean bCreate) {
 
         StepFragment stepFragment = new StepFragment();
 

@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity
     /**
      * intent/bundle
      */
-    public static final String EXTRA_MAIN_ACT_RECIPE_ACT = "extra_main_act_recipe_act";
+    public static final String EXTRA_MAIN_ACT_RECIPE_ACT_OBJ = "extra_main_act_recipe_act_obj";
+    public static final String EXTRA_MAIN_ACT_RECIPE_ACT_POS = "extra_main_act_recipe_act_pos";
 
     @BindView(R.id.rv_list) RecyclerView mRvList;
     @BindView(R.id.pb_progressbar) ProgressBar mProgressbar;
@@ -110,7 +111,8 @@ public class MainActivity extends AppCompatActivity
         Class detailsActivity = RecipeActivity.class;
         Intent intent = new Intent(context, detailsActivity);
 
-        intent.putExtra(EXTRA_MAIN_ACT_RECIPE_ACT, Parcels.wrap(mLstRecipe.get(clickedItemIndex)));
+        intent.putExtra(EXTRA_MAIN_ACT_RECIPE_ACT_OBJ, Parcels.wrap(mLstRecipe));
+        intent.putExtra(EXTRA_MAIN_ACT_RECIPE_ACT_POS, clickedItemIndex);
         startActivity(intent);
     }
 
